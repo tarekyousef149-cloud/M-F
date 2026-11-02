@@ -176,6 +176,7 @@ let SS=[],SH=[];const xd=v=>typeof v=='number'&&v>40000&&v<70000?new Date(Math.r
 dsh=async()=>JSON.parse(new TextDecoder().decode(new Uint8Array(await new Response(new Blob([Uint8Array.from(atob(DEF.d),c=>c.charCodeAt(0))]).stream().pipeThrough(new DecompressionStream('deflate'))).arrayBuffer()))).map((x,i)=>mS(i,x[0],x[1],DEF.c.st[x[2]],DEF.c.ty[x[3]],DEF.c.lw[x[4]]));
 const UP=()=>SS.concat(SH).filter(s=>s.date>=td()).sort((a,b)=>(a.date+(a.time||'')).localeCompare(b.date+(b.time||'')));
 function toast(t){const e=$('#tt');e.textContent=t;e.classList.add('on');clearTimeout(e.h);e.h=setTimeout(()=>e.classList.remove('on'),3500)}
+async function dec(b){const u=Uint8Array.from(atob(b),c=>c.charCodeAt(0));const a=new Uint8Array(await new Response(new Blob([u]).stream().pipeThrough(new DecompressionStream('deflate'))).arrayBuffer()),v=new DataView(a.buffer),o=[];for(let i=0;i<a.length;i+=11)o.push([a[i],a[i+1],a[i+2],a[i+3],a[i+4],v.getUint16(i+5,true),v.getUint32(i+7,true)]);return o}
 Chart.defaults.font.family='Cairo';Chart.defaults.animation={duration:1500,easing:'easeOutBounce'};
 Chart.register({id:'lbl',afterDatasetsDraw(c){const m=c.options.plugins.lbl&&c.options.plugins.lbl.m;if(!m)return;const x=c.ctx,d=c.data.datasets[0],S=d.data.reduce((a,b)=>a+b,0)||1,t=c.config.type,tc=getComputedStyle(document.documentElement).getPropertyValue('--t');
 x.save();x.font='700 12px Cairo';x.textAlign='center';x.textBaseline='middle';
@@ -186,9 +187,11 @@ function mk(id,type,lab,data,o={}){if(ch[id])ch[id].destroy();const tc=getComput
 const sc=type=='bar'||ln?{x:{ticks:f,grid:{display:false}},y:{beginAtZero:true,ticks:f,grid:{color:'#8883'},grace:'12%'}}:type=='radar'?{r:{ticks:{display:false,backdropColor:'transparent'},grid:{color:'#8884'},pointLabels:f}}:type=='polarArea'?{r:{ticks:{display:false},grid:{color:'#8884'}}}:{};
 ch[id]=new Chart($('#'+id),{type,data:{labels:lab,datasets:[{data,backgroundColor:ln?'#FFC40066':type=='radar'?'#FFC40088':PAL,borderColor:ln||type=='radar'?'#5B2C83':'transparent',borderWidth:ln||type=='radar'?3:0,fill:true,tension:.4,pointRadius:ln||type=='radar'?6:0,pointBackgroundColor:'#FFC400',borderRadius:10}]},
 options:{responsive:true,maintainAspectRatio:false,indexAxis:o.h?'y':'x',layout:{padding:o.h?{right:100,left:4}:{top:24,left:8,right:8}},plugins:{legend:{display:!!o.leg,position:'bottom',labels:f},lbl:{m:o.m||'n'}},scales:sc}})}
-function sel(){$('#fl').innerHTML=K.map((k,d)=>`<select data-d="${d}" aria-label="${L[d]}"><option value="">${L[d]}: الكل</option>${C[k].map((v,i)=>`<option value="${i}">${v}</option>`).join('')}</select>`).join('')}
+function sel(){$('#fl').innerHTML=K.map((k,d)=>`<select data-d="${d}" aria-label="${L[d]}"><option value="">${L[d]}: الكل</option>${C[k].map((v,i)=>`<option value="${i}">${v}</option>`).join('')}</select>`).join('');
+$('#fl2').innerHTML=C.lw.map(w=>`<option>${w}</option>`).join('')}
 $('#fl').onchange=e=>{const d=e.target.dataset.d;e.target.value===''?delete F[d]:F[d]=+e.target.value;render()};
 function cnt(e,v,f){if(EX){e.textContent=f(v);return}const t0=performance.now();(function s(t){const p=Math.min(1,(t-t0)/1300),k=1-Math.pow(1-p,3);e.textContent=f(v*k);if(p<1)requestAnimationFrame(s)})(t0)}
+let sfrom='',sto='';
 function render(){const D=R.filter(r=>Object.keys(F).every(d=>r[d]==F[d])),tot=D.reduce((s,r)=>s+r[5],0),amt=D.reduce((s,r)=>s+r[6]*10,0),T=tot||1;
 const ag=d=>{const m=C[K[d]].map(()=>[0,0]);D.forEach(r=>{m[r[d]][0]+=r[5];m[r[d]][1]+=r[6]*10});return m};
 const A=[0,1,2,3,4].map(ag),ix=(d,n)=>C[K[d]].indexOf(n),cn=(d,n)=>{const i=ix(d,n);return i<0?0:A[d][i][0]};
@@ -213,7 +216,38 @@ const RK=[['انخفاض معدل التنفيذ','معدل التنفيذ '+pc(
 ['تركز العبء على محامين','أعلى محامٍ: '+top[0]+' بنسبة '+(avg?top[1]/avg:0).toFixed(2)+'× المتوسط',lv(top[1]/avg,1.4,1.15),'إعادة توزيع القضايا حسب القيمة والنوع بما يوازن الأعباء، وتحديد حد أقصى للقضايا النشطة لكل محامٍ.'],
 ['تركز قيمة المطالبات','أعلى نوع قيمة: '+tm[0]+' ('+pc(tm[1]/(amt||1)*100)+')',lv(tm[1]/(amt||1)*100,80,60),'مراجعة سياسة التحصيل للنوع الأعلى، وتفعيل التسويات الودية والخصومات المدروسة للمبالغ الكبيرة.'],
 ['جودة البيانات','سجلات بمرحلة أو نوع غير مصنف: '+fn(oth)+' ('+pc(oth/T*100)+')',lv(oth/T*100,3,1),'توحيد قوائم المراحل والأنواع في النظام، وإلزام الإدخال من قوائم منسدلة، ومراجعة القيم الشاذة في المبالغ.'],['جلسات قريبة خلال 3 أيام','عدد الجلسات: '+UP().filter(s=>dd(s.date)<=3).length,lv(UP().filter(s=>dd(s.date)<=3).length,5,1),'تجهيز المذكرات والمستندات قبل الجلسة بيومين على الأقل، وتأكيد حضور المحامي المسؤول، وتنبيه الفريق بالمواعيد.']].sort((a,b)=>b[2]-a[2]);
-$('#rk').innerHTML=RK.map((r,i)=>`<div class="rk v${r[2]}" style="--i:${i}"><h3>${r[0]}</h3><span class="pl">مستوى الخطر: ${['منخفض','متوسط','عالٍ'][r[2]]}</span><p><b>${r[1]}</b></p><p class="sl"><b>الحل المقترح:</b> ${r[3]}</p></div>`).join('')}
+$('#rk').innerHTML=RK.map((r,i)=>`<div class="rk v${r[2]}" style="--i:${i}"><h3>${r[0]}</h3><span class="pl">مستوى الخطر: ${['منخفض','متوسط','عالٍ'][r[2]]}</span><p><b>${r[1]}</b></p><p class="sl"><b>الحل المقترح:</b> ${r[3]}</p></div>`).join('');
+renderSess()}
+
+function renderSess(){
+  const all=SS.concat(SH).filter(s=>(!sfrom||s.date>=sfrom)&&(!sto||s.date<=sto)).sort((a,b)=>(a.date+(a.time||'')).localeCompare(b.date+(b.time||'')));
+  const upc=all.filter(s=>s.date>=td());
+  $('#sk').innerHTML=[['إجمالي الجلسات',all.fn||all.length,fn,'الجلسة المسجلة'],['الجلسات القادمة',upc.length,fn,'جلسات قادمة'],['جلسات اليوم',all.filter(s=>s.date==td()).length,fn,'جلسات تاريخ اليوم'],['أقرب جلسة',null,upc[0]?fd(upc[0].date):'لا توجد','موعِد الجلسة القادمة']].map((k,i)=>`<div class="k" style="--i:${i}"><span>${k[0]}</span><b>${k[1]===null?k[2]:0}</b><small>${k[3]}</small></div>`).join('');
+  $$('#sk .k').forEach((e,i)=>{const k=[[all.length,fn],[upc.length,fn],[all.filter(s=>s.date==td()).length,fn]][i];if(k)cnt(e.querySelector('b'),k[0],k[1])});
+  $('#sc').innerHTML=['الكل','اليوم','خلال أسبوع','خلال شهر'].map((t,i)=>`<button class="b ${i===role?'s':''}" onclick="setRole(${i})">${t}</button>`).join('');
+  const dt=all.filter(s=>{if(role==1)return s.date==td();if(role==2)return dd(s.date)>=0&&dd(s.date)<=7;if(role==3)return dd(s.date)>=0&&dd(s.date)<=30;return true});
+  $('#sl').innerHTML=dt.length?dt.map((s,i)=>`
+    <div class="rk v1" style="--i:${i}">
+      <span class="pl">قضية رقم: ${s.case}</span>
+      <p><b>نوع الجلسة:</b> ${s.kind}</p>
+      <p><b>التاريخ:</b> ${fd(s.date)} ${s.time?(' | الوقت: '+s.time):''}</p>
+      <p><b>المحامي المسؤول:</b> ${s.lawyer}</p>
+      ${s.note?('<p class="sl"><b>ملاحظات:</b> '+s.note+'</p>'):''}
+      <a href="https://api.whatsapp.com/send?text=${encodeURIComponent('تذكير بجلسة القضية رقم: '+s.case+' بتاريخ '+fd(s.date)+' - نوع الجلسة: '+s.kind)}" target="_blank" class="b s" style="display:inline-block;margin-top:8px;text-decoration:none;font-size:13px;">تذكير واتساب للمحامي 💬</a>
+    </div>`).join('') : '<div class="cd" style="grid-column:1/-1"><h3>لا توجد جلسات مسجلة في هذه الفترة</h3></div>';
+}
+window.setRole=r=>{role=r;renderSess()};
+$('#sfrom').onchange=e=>{sfrom=e.target.value;renderSess()};
+$('#sto').onchange=e=>{sto=e.target.value;renderSess()};
+$('#sreset').onclick=()=>{sfrom='';sto='';$('#sfrom').value='';$('#sto').value='';renderSess()};
+$('#fa').onclick=()=>{
+  const c=$('#fc').value,d=$('#fd').value,t=$('#ft2').value,k=$('#fk').value,l=$('#fl2').value,n=$('#fn').value;
+  if(!c||!d){toast('يرجى إدخال رقم القضية والتاريخ');return}
+  SH.push({id:'sh'+Date.now(),case:c,date:d,time:t,kind:k,lawyer:l,note:n,src:2});
+  $('#fc').value='';$('#fd').value='';$('#ft2').value='';$('#fn').value='';
+  renderSess();toast('تمت إضافة الجلسة بنجاح');
+};
+
 function go(i){pi=(i+4)%4;$$('.pg').forEach((p,j)=>p.classList.toggle('on',j==pi));$$('#nv .b').forEach((b,j)=>b.classList.toggle('on',j==pi));scrollTo({top:0,behavior:'smooth'});render()}
 $('#nv').innerHTML=PG.map((p,i)=>`<button class="b" data-i="${i}">${i+1}. ${p}</button>`).join('')+'<button class="b" id="pv">السابق</button><button class="b" id="nx">التالي</button>';
 $$('#nv .b[data-i]').forEach(b=>b.onclick=()=>go(+b.dataset.i));$('#pv').onclick=()=>go(pi-1);$('#nx').onclick=()=>go(pi+1);
@@ -228,7 +262,8 @@ $('#rs').onclick=async()=>{R=await dsh();name='بيانات المحاكم ال�
 async function initPortal(){
   try{
     R = await dsh();
-  }catch(e){R=[];}
+    SS = await dsh();
+  }catch(e){R=[];SS=[];}
   sel(); render();
 }
 </script>
