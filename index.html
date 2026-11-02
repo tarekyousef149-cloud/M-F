@@ -116,7 +116,7 @@ main{max-width:1240px;margin:0 auto;padding:0 14px 30px}
     </div>
 </div>
 
-<!-- محتوى البوابة بالكامل (يظهر بعد تسجيل الدخول بنجاح) -->
+<!-- محتوى البوابة بالكامل -->
 <div id="portalContent" style="display: none;">
 <div class="bg"></div>
 <header class="top"><img class="lg" alt="شعار"><div><h1>بوابة تحليل القضايا والمحاكم</h1><small id="src"></small><br><small id="rl"></small></div></header>
@@ -142,7 +142,11 @@ main{max-width:1240px;margin:0 auto;padding:0 14px 30px}
 </div>
 <div id="tt" role="status"></div>
 
-<!-- السكريبت الخاص بتسجيل الدخول ووظائف البوابة -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/PptxGenJS/3.12.0/pptxgen.bundle.js"></script>
 <script>
 document.getElementById("loginForm").addEventListener("submit", function(e) {
   e.preventDefault();
@@ -153,21 +157,13 @@ document.getElementById("loginForm").addEventListener("submit", function(e) {
   if (user === "tarek" && pass === "jo333") {
     document.getElementById("loginPage").style.display = "none";
     document.getElementById("portalContent").style.display = "block";
-    // إعادة تفعيل تشغيل البوابة والرسوم البيانية عند الدخول الناجح
     initPortal();
   } else {
     document.getElementById("message").textContent =
       "اسم المستخدم أو كلمة المرور غير صحيحة";
   }
 });
-</script>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/PptxGenJS/3.12.0/pptxgen.bundle.js"></script>
-<script>
 const DEF={"c":{"st":["تم التنفيذ","محال للمحكمة","تم الحكم","رد الدعوى","ترك الخصومة","تم الصلح","رفض الدعوى","صرف النظر","أخرى"],"ty":["ايجار","حادث","تلفيات","مخالفات","ضد الشركة","رد عين","أخرى"],"lw":["احمد ممدوح عبدالحميد درار","مصعب سالم عايض آل برقع القحطاني","الغيداء عثمان هاشم الصعيبي","محمد عبيد محمد باهميم","عبدالله مبارك سالم ال جمعه العمري","يوسف علي محمد الفقيه","ساره علي عايض القحطاني","بداح ناصر محمد ضويان","محمد تركي علي الكناني الزهراني","يزيد سعد علي الوادعي","اشواق عبداللطيف محمد القحطاني","وفاء يحيى يحيى مساوي","مها عبدالله محمد الفارس","عبدالإله محمد صقر الولمان الدوسري","أخرى"],"yr":["أخرى","2024","2025","2026"],"cs":["مطالبة","مسدد","ضد الشركة","أخرى"]},"d":"eNpNmwe0VtWVx/c555avP9p7jw4PeagRjGAjhIht7GCNFUEMahQ1CkpMBhMrihBRx5IsjWPLsoyOOqjRMSouiWLCjDjLRCXW2HDZEkMSTYyZ/f/ve+8hZH3rt7b77rNP22ef8mpZx4kT/K+WdYLimUQBHuGADeD2lHrgVZTmQbz0B2A7SutASqXjFS+sESF9zRNFP/tvA5hDelQbmEF6cAaksdOICfCWgcAajA0fS4Tu6cOAWk4uj88EOtTiSkcUtffwfsAWPvsGC26K4vHEVPTLb8MC/rOqN4hQOK8FZMG/gK6vQaGdEKHwahMY8OGllKoPidzeB3RQeJnSVMrPHNv3giYRdo9JgQILw1pE6A6tA9nUnxMzKCTUzaDQT2zD2PouIjpg3GAgza1iaTVY6GsQUc1etK8LakrmDyDC2H3UdWi19TmwBbvLHBEKNUpT1O133YpJJ/hE7qsbqsJc2E3Eu2LsJBK0/ptgIfHA59GFSe4qhdxrW83yhlJJQ6XQ9vrZ6wVGKYzNod22FifL0A5JEu0mntjuUtUgSWNgYDJ0vFdhZg4lBfdjbGUYL4itdqT4LMLZP27DyN4QKna8+c9Ffp98Vn7XguknT6E4ajaUSIkZdcRExxoGBE/JDuBDr0W5qfeLSIZK2aE4asZ697eNlQeXF7M9y2fS2W7lJS3H3rxlGq0mUaY21rIq1uV0a7LpZ25f4I8y9l7J9lZq/hK1a6l2XFfLq5e20r7m1c2K6qf3vS23H6V3b28s6f77q7u+L0X823b16t20d6q/52+v6n631v6e8rN217Z+2rV7vXzV19u6zuv8n6/7u5X7u57X79v987u/9dvd+7f/7v9977/v979v8n6v7v+3v/7f9/+/f///v8AAABQAQ=="};
 const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
 const K=['st','ty','lw','yr','cs'],L=['المرحلة','نوع الدعوى','المحامي','السنة','حالة العقد'],PG=['نظرة عامة','التحليلات البيانية','المخاطر والحلول','مواعيد الجلسات'];
@@ -223,10 +219,15 @@ $('#nv').innerHTML=PG.map((p,i)=>`<button class="b" data-i="${i}">${i+1}. ${p}</
 $$('#nv .b[data-i]').forEach(b=>b.onclick=()=>go(+b.dataset.i));$('#pv').onclick=()=>go(pi-1);$('#nx').onclick=()=>go(pi+1);
 $$('.lg').forEach(e=>e.src=LG);
 
+// معالج رفع الملفات وتحليل شيتات الإكسيل والـ CSV
+$('#up').onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=ev=>{try{const wb=XLSX.read(ev.target.result,{type:'binary'}),ws=wb.Sheets[wb.SheetNames[0]],js=XLSX.utils.sheet_to_json(ws,{header:1});
+if(js.length>1){const rows=js.slice(1).map(row=>[+row[0]||0,+row[1]||0,+row[2]||0,+row[3]||0,+row[4]||0,+row[5]||1,+row[6]||1000]);if(rows.length>0){R=rows;name=f.name;sel();render();toast('تم رفع الشيت وتحليل البيانات بنجاح')}}
+}catch(err){toast('خطأ في قراءة الملف')}};r.readAsBinaryString(f)};
+$('#rs').onclick=async()=>{R=await dsh();name='بيانات المحاكم الأصلية';sel();render();toast('تم استعادة البيانات الأصلية')};
+
 async function initPortal(){
   try{
-    const u = await dsh();
-    R = u.map(x => [0,0,0,1,0,1,1000]); // تعيينات افتراضية للبيانات الأساسية لتعمل الواجهة بكفاءة
+    R = await dsh();
   }catch(e){R=[];}
   sel(); render();
 }
