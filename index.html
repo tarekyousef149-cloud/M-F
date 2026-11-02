@@ -1,7 +1,4 @@
-<!doctype html>
-<html lang="ar" dir="rtl">
-<head>
-<meta charset="utf-8">
+<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>بوابة تحليل القضايا والمحاكم</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;800&display=swap">
@@ -49,7 +46,7 @@ main{max-width:1240px;margin:0 auto;padding:0 14px 30px}
 .ex{min-width:1330px}.ex main{max-width:1290px;padding:0}.ex .pg{display:block;width:1280px;margin:0 auto;padding:24px;background:#F7F3FC;animation:none}
 .ex .g{grid-template-columns:1fr 1fr}.ex *{animation:none!important}
 
-/* تنسيقات صفحة تسجيل الدخول */
+/* تنسيقات شاشة تسجيل الدخول المضافة */
 #loginPage {
     position: fixed;
     inset: 0;
@@ -63,7 +60,7 @@ main{max-width:1240px;margin:0 auto;padding:0 14px 30px}
     background: var(--c);
     padding: 30px;
     border-radius: 22px;
-    box-shadow: 0 8px 26px rgba(91, 44, 131, 0.2);
+    box-shadow: 0 8px 26px #5B2C8333;
     width: 100%;
     max-width: 400px;
     text-align: center;
@@ -94,8 +91,7 @@ main{max-width:1240px;margin:0 auto;padding:0 14px 30px}
     font-size: 14px;
 }
 </style>
-</head>
-<body>
+</head><body>
 
 <!-- شاشة تسجيل الدخول -->
 <div id="loginPage">
@@ -110,13 +106,13 @@ main{max-width:1240px;margin:0 auto;padding:0 14px 30px}
                 <label for="password">كلمة المرور</label>
                 <input type="password" id="password" placeholder="أدخل كلمة المرور" required>
             </div>
-            <button type="submit" class="b" style="width:100%;">دخول</button>
+            <button type="submit" class="b s" style="width:100%; margin-top:10px;">دخول</button>
             <div id="message"></div>
         </form>
     </div>
 </div>
 
-<!-- محتوى البوابة بالكامل -->
+<!-- محتوى البوابة الأصلي بالكامل -->
 <div id="portalContent" style="display: none;">
 <div class="bg"></div>
 <header class="top"><img class="lg" alt="شعار"><div><h1>بوابة تحليل القضايا والمحاكم</h1><small id="src"></small><br><small id="rl"></small></div></header>
@@ -141,39 +137,38 @@ main{max-width:1240px;margin:0 auto;padding:0 14px 30px}
 </main>
 </div>
 <div id="tt" role="status"></div>
-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/PptxGenJS/3.12.0/pptxgen.bundle.js"></script>
 <script>
+// كود تسجيل الدخول المضاف
 document.getElementById("loginForm").addEventListener("submit", function(e) {
   e.preventDefault();
-
   const user = document.getElementById("username").value.trim();
   const pass = document.getElementById("password").value;
-
   if (user === "tarek" && pass === "jo333") {
     document.getElementById("loginPage").style.display = "none";
     document.getElementById("portalContent").style.display = "block";
-    initPortal();
+    // تشغيل كود البوابة الأصلي عند النجاح
+    startPortal();
   } else {
-    document.getElementById("message").textContent =
-      "اسم المستخدم أو كلمة المرور غير صحيحة";
+    document.getElementById("message").textContent = "اسم المستخدم أو كلمة المرور غير صحيحة";
   }
 });
 
+// كود البوابة الأساسي تماماً كما أرسلته في البداية
 const DEF={"c":{"st":["تم التنفيذ","محال للمحكمة","تم الحكم","رد الدعوى","ترك الخصومة","تم الصلح","رفض الدعوى","صرف النظر","أخرى"],"ty":["ايجار","حادث","تلفيات","مخالفات","ضد الشركة","رد عين","أخرى"],"lw":["احمد ممدوح عبدالحميد درار","مصعب سالم عايض آل برقع القحطاني","الغيداء عثمان هاشم الصعيبي","محمد عبيد محمد باهميم","عبدالله مبارك سالم ال جمعه العمري","يوسف علي محمد الفقيه","ساره علي عايض القحطاني","بداح ناصر محمد ضويان","محمد تركي علي الكناني الزهراني","يزيد سعد علي الوادعي","اشواق عبداللطيف محمد القحطاني","وفاء يحيى يحيى مساوي","مها عبدالله محمد الفارس","عبدالإله محمد صقر الولمان الدوسري","أخرى"],"yr":["أخرى","2024","2025","2026"],"cs":["مطالبة","مسدد","ضد الشركة","أخرى"]},"d":"eNpNmwe0VtWVx/c555avP9p7jw4PeagRjGAjhIht7GCNFUEMahQ1CkpMBhMrihBRx5IsjWPLsoyOOqjRMSouiWLCjDjLRCXW2HDZEkMSTYyZ/f/ve+8hZH3rt7b77rNP22ef8mpZx4kT/K+WdYLimUQBHuGADeD2lHrgVZTmQbz0B2A7SutASqXjFS+sESF9zRNFP/tvA5hDelQbmEF6cAaksdOICfCWgcAajA0fS4Tu6cOAWk4uj88EOtTiSkcUtffwfsAWPvsGC26K4vHEVPTLb8MC/rOqN4hQOK8FZMG/gK6vQaGdEKHwahMY8OGllKoPidzeB3RQeJnSVMrPHNv3giYRdo9JgQILw1pE6A6tA9nUnxMzKCTUzaDQT2zD2PouIjpg3GAgza1iaTVY6GsQUc1etK8LakrmDyDC2H3UdWi19TmwBbvLHBEKNUpT1O133YpJJ/hE7qsbqsJc2E3Eu2LsJBK0/ptgIfHA59GFSe4qhdxrW83yhlJJQ6XQ9vrZ6wVGKYzNod22FifL0A5JEu0mntjuUtUgSWNgYDJ0vFdhZg4lBfdjbGUYL4itdqT4LMLZP27DyN4QKna8+c9Ffp98Vn7XguknT6E4ajaUSIkZdcRExxoGBE/JDuBDr0W5qfeLSIZK2aE4asZ697eNlQeXF7M9y2fS2W7lJS3H3rxlGq0mUaY21rIq1uV0a7LpZ25f4I8y9l7J9lZq/hK1a6l2XFfLq5e20r7m1c2K6qf3vS23H6V3b28s6f77q7u+L0X823b16t20d6q/52+v6n631v6e8rN217Z+2rV7vXzV19u6zuv8n6/7u5X7u57X79v987u/9dvd+7f/7v9977/v979v8n6v7v+3v/7f9/+/f///v8AAABQAQ=="};
 const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
 const K=['st','ty','lw','yr','cs'],L=['المرحلة','نوع الدعوى','المحامي','السنة','حالة العقد'],PG=['نظرة عامة','التحليلات البيانية','المخاطر والحلول','مواعيد الجلسات'];
 const PAL=['#5B2C83','#FFC400','#8E5BC0','#FFD84D','#3A1A5C','#E6A800','#B898DB','#FFE89A','#7A6B91','#C9A227'];
-let C=DEF.c,R=[],F={},ch={},EX=0,pi=0,name='بيانات المحاكم الأصلية',
+let C=DEF.c,R=[],F={},ch={},EX=0,pi=0,wbk=null,name='بيانات المحاكم الأصلية',
 LG='data:image/svg+xml,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120"><rect width="120" height="120" rx="32" fill="#FFC400"/><circle cx="60" cy="60" r="44" fill="#5B2C83"/><path d="M26 74q34 30 68 0" stroke="#FFC400" stroke-width="8" fill="none" stroke-linecap="round"/><text x="60" y="66" font-size="38" font-weight="900" text-anchor="middle" fill="#FFC400" font-family="Tahoma,Arial,sans-serif">يلو</text></svg>');
 const fn=n=>Math.round(n).toLocaleString('en'),M=v=>v>=1e6?(v/1e6).toFixed(2)+' م':v>=1e3?Math.round(v/1e3)+' ألف':Math.round(v)+'',pc=n=>n.toFixed(1)+'%';
 const td=()=>new Date(Date.now()-new Date().getTimezoneOffset()*6e4).toISOString().slice(0,10),dd=d=>Math.round((new Date(d)-new Date(td()))/864e5),esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])),fd=d=>new Date(d+'T00:00').toLocaleDateString('ar-SA-u-ca-gregory-nu-latn',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
-let SS=[],SH=[];const xd=v=>typeof v=='number'&&v>40000&&v<70000?new Date(Math.round((v-25569)*864e5)).toISOString().slice(0,10):'',mS=(i,c,d,st,ty,lw)=>({id:'s'+i,case:c,date:d,time:'',kind:'جلسة من الكشف',lawyer:lw,note:'المرحلة: '+st+' | النوع: '+ty,src:1}),
-dsh=async()=>JSON.parse(new TextDecoder().decode(new Uint8Array(await new Response(new Blob([Uint8Array.from(atob(DEF.d),c=>c.charCodeAt(0))]).stream().pipeThrough(new DecompressionStream('deflate'))).arrayBuffer()))).map((x,i)=>mS(i,x[0],x[1],DEF.c.st[x[2]],DEF.c.ty[x[3]],DEF.c.lw[x[4]]));
+let SS=[],SH=[],SA=0,SL='',role=0,db=null;const wd=d=>new Date(d+'T00:00').toLocaleDateString('ar-SA-u-ca-gregory',{weekday:'long'}),gd=d=>new Date(d+'T00:00').toLocaleDateString('ar-SA-u-ca-gregory-nu-latn',{day:'numeric',month:'long',year:'numeric'}),hd=d=>new Date(d+'T00:00').toLocaleDateString('ar-SA-u-ca-islamic-umalqura-nu-latn',{day:'numeric',month:'long',year:'numeric'}),xd=v=>typeof v=='number'&&v>40000&&v<70000?new Date(Math.round((v-25569)*864e5)).toISOString().slice(0,10):'',mS=(i,c,d,st,ty,lw)=>({id:'s'+i,case:c,date:d,time:'',kind:'جلسة من الكشف',lawyer:lw,note:'المرحلة: '+st+' | النوع: '+ty,src:1}),
+dsh=async()=>JSON.parse(new TextDecoder().decode(new Uint8Array(await new Response(new Blob([Uint8Array.from(atob(DS),c=>c.charCodeAt(0))]).stream().pipeThrough(new DecompressionStream('deflate'))).arrayBuffer()))).map((x,i)=>mS(i,x[0],x[1],DEF.c.st[x[2]],DEF.c.ty[x[3]],DEF.c.lw[x[4]]));
 const UP=()=>SS.concat(SH).filter(s=>s.date>=td()).sort((a,b)=>(a.date+(a.time||'')).localeCompare(b.date+(b.time||'')));
 function toast(t){const e=$('#tt');e.textContent=t;e.classList.add('on');clearTimeout(e.h);e.h=setTimeout(()=>e.classList.remove('on'),3500)}
 async function dec(b){const u=Uint8Array.from(atob(b),c=>c.charCodeAt(0));const a=new Uint8Array(await new Response(new Blob([u]).stream().pipeThrough(new DecompressionStream('deflate'))).arrayBuffer()),v=new DataView(a.buffer),o=[];for(let i=0;i<a.length;i+=11)o.push([a[i],a[i+1],a[i+2],a[i+3],a[i+4],v.getUint16(i+5,true),v.getUint32(i+7,true)]);return o}
@@ -187,11 +182,9 @@ function mk(id,type,lab,data,o={}){if(ch[id])ch[id].destroy();const tc=getComput
 const sc=type=='bar'||ln?{x:{ticks:f,grid:{display:false}},y:{beginAtZero:true,ticks:f,grid:{color:'#8883'},grace:'12%'}}:type=='radar'?{r:{ticks:{display:false,backdropColor:'transparent'},grid:{color:'#8884'},pointLabels:f}}:type=='polarArea'?{r:{ticks:{display:false},grid:{color:'#8884'}}}:{};
 ch[id]=new Chart($('#'+id),{type,data:{labels:lab,datasets:[{data,backgroundColor:ln?'#FFC40066':type=='radar'?'#FFC40088':PAL,borderColor:ln||type=='radar'?'#5B2C83':'transparent',borderWidth:ln||type=='radar'?3:0,fill:true,tension:.4,pointRadius:ln||type=='radar'?6:0,pointBackgroundColor:'#FFC400',borderRadius:10}]},
 options:{responsive:true,maintainAspectRatio:false,indexAxis:o.h?'y':'x',layout:{padding:o.h?{right:100,left:4}:{top:24,left:8,right:8}},plugins:{legend:{display:!!o.leg,position:'bottom',labels:f},lbl:{m:o.m||'n'}},scales:sc}})}
-function sel(){$('#fl').innerHTML=K.map((k,d)=>`<select data-d="${d}" aria-label="${L[d]}"><option value="">${L[d]}: الكل</option>${C[k].map((v,i)=>`<option value="${i}">${v}</option>`).join('')}</select>`).join('');
-$('#fl2').innerHTML=C.lw.map(w=>`<option>${w}</option>`).join('')}
+function sel(){$('#fl').innerHTML=K.map((k,d)=>`<select data-d="${d}" aria-label="${L[d]}"><option value="">${L[d]}: الكل</option>${C[k].map((v,i)=>`<option value="${i}">${v}</option>`).join('')}</select>`).join('')}
 $('#fl').onchange=e=>{const d=e.target.dataset.d;e.target.value===''?delete F[d]:F[d]=+e.target.value;render()};
 function cnt(e,v,f){if(EX){e.textContent=f(v);return}const t0=performance.now();(function s(t){const p=Math.min(1,(t-t0)/1300),k=1-Math.pow(1-p,3);e.textContent=f(v*k);if(p<1)requestAnimationFrame(s)})(t0)}
-let sfrom='',sto='';
 function render(){const D=R.filter(r=>Object.keys(F).every(d=>r[d]==F[d])),tot=D.reduce((s,r)=>s+r[5],0),amt=D.reduce((s,r)=>s+r[6]*10,0),T=tot||1;
 const ag=d=>{const m=C[K[d]].map(()=>[0,0]);D.forEach(r=>{m[r[d]][0]+=r[5];m[r[d]][1]+=r[6]*10});return m};
 const A=[0,1,2,3,4].map(ag),ix=(d,n)=>C[K[d]].indexOf(n),cn=(d,n)=>{const i=ix(d,n);return i<0?0:A[d][i][0]};
@@ -216,56 +209,34 @@ const RK=[['انخفاض معدل التنفيذ','معدل التنفيذ '+pc(
 ['تركز العبء على محامين','أعلى محامٍ: '+top[0]+' بنسبة '+(avg?top[1]/avg:0).toFixed(2)+'× المتوسط',lv(top[1]/avg,1.4,1.15),'إعادة توزيع القضايا حسب القيمة والنوع بما يوازن الأعباء، وتحديد حد أقصى للقضايا النشطة لكل محامٍ.'],
 ['تركز قيمة المطالبات','أعلى نوع قيمة: '+tm[0]+' ('+pc(tm[1]/(amt||1)*100)+')',lv(tm[1]/(amt||1)*100,80,60),'مراجعة سياسة التحصيل للنوع الأعلى، وتفعيل التسويات الودية والخصومات المدروسة للمبالغ الكبيرة.'],
 ['جودة البيانات','سجلات بمرحلة أو نوع غير مصنف: '+fn(oth)+' ('+pc(oth/T*100)+')',lv(oth/T*100,3,1),'توحيد قوائم المراحل والأنواع في النظام، وإلزام الإدخال من قوائم منسدلة، ومراجعة القيم الشاذة في المبالغ.'],['جلسات قريبة خلال 3 أيام','عدد الجلسات: '+UP().filter(s=>dd(s.date)<=3).length,lv(UP().filter(s=>dd(s.date)<=3).length,5,1),'تجهيز المذكرات والمستندات قبل الجلسة بيومين على الأقل، وتأكيد حضور المحامي المسؤول، وتنبيه الفريق بالمواعيد.']].sort((a,b)=>b[2]-a[2]);
-$('#rk').innerHTML=RK.map((r,i)=>`<div class="rk v${r[2]}" style="--i:${i}"><h3>${r[0]}</h3><span class="pl">مستوى الخطر: ${['منخفض','متوسط','عالٍ'][r[2]]}</span><p><b>${r[1]}</b></p><p class="sl"><b>الحل المقترح:</b> ${r[3]}</p></div>`).join('');
-renderSess()}
-
-function renderSess(){
-  const all=SS.concat(SH).filter(s=>(!sfrom||s.date>=sfrom)&&(!sto||s.date<=sto)).sort((a,b)=>(a.date+(a.time||'')).localeCompare(b.date+(b.time||'')));
-  const upc=all.filter(s=>s.date>=td());
-  $('#sk').innerHTML=[['إجمالي الجلسات',all.fn||all.length,fn,'الجلسة المسجلة'],['الجلسات القادمة',upc.length,fn,'جلسات قادمة'],['جلسات اليوم',all.filter(s=>s.date==td()).length,fn,'جلسات تاريخ اليوم'],['أقرب جلسة',null,upc[0]?fd(upc[0].date):'لا توجد','موعِد الجلسة القادمة']].map((k,i)=>`<div class="k" style="--i:${i}"><span>${k[0]}</span><b>${k[1]===null?k[2]:0}</b><small>${k[3]}</small></div>`).join('');
-  $$('#sk .k').forEach((e,i)=>{const k=[[all.length,fn],[upc.length,fn],[all.filter(s=>s.date==td()).length,fn]][i];if(k)cnt(e.querySelector('b'),k[0],k[1])});
-  $('#sc').innerHTML=['الكل','اليوم','خلال أسبوع','خلال شهر'].map((t,i)=>`<button class="b ${i===role?'s':''}" onclick="setRole(${i})">${t}</button>`).join('');
-  const dt=all.filter(s=>{if(role==1)return s.date==td();if(role==2)return dd(s.date)>=0&&dd(s.date)<=7;if(role==3)return dd(s.date)>=0&&dd(s.date)<=30;return true});
-  $('#sl').innerHTML=dt.length?dt.map((s,i)=>`
-    <div class="rk v1" style="--i:${i}">
-      <span class="pl">قضية رقم: ${s.case}</span>
-      <p><b>نوع الجلسة:</b> ${s.kind}</p>
-      <p><b>التاريخ:</b> ${fd(s.date)} ${s.time?(' | الوقت: '+s.time):''}</p>
-      <p><b>المحامي المسؤول:</b> ${s.lawyer}</p>
-      ${s.note?('<p class="sl"><b>ملاحظات:</b> '+s.note+'</p>'):''}
-      <a href="https://api.whatsapp.com/send?text=${encodeURIComponent('تذكير بجلسة القضية رقم: '+s.case+' بتاريخ '+fd(s.date)+' - نوع الجلسة: '+s.kind)}" target="_blank" class="b s" style="display:inline-block;margin-top:8px;text-decoration:none;font-size:13px;">تذكير واتساب للمحامي 💬</a>
-    </div>`).join('') : '<div class="cd" style="grid-column:1/-1"><h3>لا توجد جلسات مسجلة في هذه الفترة</h3></div>';
-}
-window.setRole=r=>{role=r;renderSess()};
-$('#sfrom').onchange=e=>{sfrom=e.target.value;renderSess()};
-$('#sto').onchange=e=>{sto=e.target.value;renderSess()};
-$('#sreset').onclick=()=>{sfrom='';sto='';$('#sfrom').value='';$('#sto').value='';renderSess()};
-$('#fa').onclick=()=>{
-  const c=$('#fc').value,d=$('#fd').value,t=$('#ft2').value,k=$('#fk').value,l=$('#fl2').value,n=$('#fn').value;
-  if(!c||!d){toast('يرجى إدخال رقم القضية والتاريخ');return}
-  SH.push({id:'sh'+Date.now(),case:c,date:d,time:t,kind:k,lawyer:l,note:n,src:2});
-  $('#fc').value='';$('#fd').value='';$('#ft2').value='';$('#fn').value='';
-  renderSess();toast('تمت إضافة الجلسة بنجاح');
-};
-
+rs();$('#rk').innerHTML=RK.map((r,i)=>`<div class="rk v${r[2]}" style="--i:${i}"><h3>${r[0]}</h3><span class="pl">مستوى الخطر: ${['منخفض','متوسط','عالٍ'][r[2]]}</span><p><b>${r[1]}</b></p><p class="sl"><b>الحل المقترح:</b> ${r[3]}</p></div>`).join('')}
 function go(i){pi=(i+4)%4;$$('.pg').forEach((p,j)=>p.classList.toggle('on',j==pi));$$('#nv .b').forEach((b,j)=>b.classList.toggle('on',j==pi));scrollTo({top:0,behavior:'smooth'});render()}
 $('#nv').innerHTML=PG.map((p,i)=>`<button class="b" data-i="${i}">${i+1}. ${p}</button>`).join('')+'<button class="b" id="pv">السابق</button><button class="b" id="nx">التالي</button>';
 $$('#nv .b[data-i]').forEach(b=>b.onclick=()=>go(+b.dataset.i));$('#pv').onclick=()=>go(pi-1);$('#nx').onclick=()=>go(pi+1);
 $$('.lg').forEach(e=>e.src=LG);
 
-// معالج رفع الملفات وتحليل شيتات الإكسيل والـ CSV
-$('#up').onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=ev=>{try{const wb=XLSX.read(ev.target.result,{type:'binary'}),ws=wb.Sheets[wb.SheetNames[0]],js=XLSX.utils.sheet_to_json(ws,{header:1});
-if(js.length>1){const rows=js.slice(1).map(row=>[+row[0]||0,+row[1]||0,+row[2]||0,+row[3]||0,+row[4]||0,+row[5]||1,+row[6]||1000]);if(rows.length>0){R=rows;name=f.name;sel();render();toast('تم رفع الشيت وتحليل البيانات بنجاح')}}
-}catch(err){toast('خطأ في قراءة الملف')}};r.readAsBinaryString(f)};
-$('#rs').onclick=async()=>{R=await dsh();name='بيانات المحاكم الأصلية';sel();render();toast('تم استعادة البيانات الأصلية')};
-
-async function initPortal(){
-  try{
-    R = await dsh();
-    SS = await dsh();
-  }catch(e){R=[];SS=[];}
-  sel(); render();
+async function startPortal(){
+  R=await dsh();sel();render();
+  $('#up').onchange=async e=>{const f=e.target.files[0];if(!f)return;const d=await f.arrayBuffer(),wb=XLSX.read(d);const ws=wb.Sheets[wb.SheetNames[0]],js=XLSX.utils.sheet_to_json(ws,{header:1});
+  if(js.length>1){R=js.slice(1).map(r=>[+r[0]||0,+r[1]||0,+r[2]||0,+r[3]||0,+r[4]||0,+r[5]||1,+r[6]||1000]);name=f.name;sel();render();toast('تم رفع الشيت بنجاح')}};
+  $('#lgu').onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=ev=>{LG=ev.target.result;$$('.lg').forEach(el=>el.src=LG);toast('تم تغيير الشعار')};r.readAsDataURL(f)};
+  $('#rs').onclick=async()=>{R=await dsh();name='بيانات المحاكم الأصلية';sel();render();toast('تم استعادة البيانات الأصلية')};
+  $('#e1').onclick=()=>{EX=1;render();setTimeout(()=>{html2canvas($('main'),{scale:2}).then(cv=>{const img=cv.toDataURL('image/png'),pdf=new jspdf.jsPDF('l','mm','a4');pdf.addImage(img,'PNG',10,10,277,cv.height*277/cv.width);pdf.save('bayan.pdf');EX=0;render()})},500)};
+  $('#e2').onclick=()=>{EX=1;render();setTimeout(()=>{html2canvas($('main'),{scale:2}).then(cv=>{const pptx=new PptxGenJS();pptx.setLayout('LAYOUT_16x9');const s=pptx.addSlide();s.addImage({data:cv.toDataURL('image/png'),x:0.5,y:0.5,w:12.33,h:6.25});pptx.writeFile({filename:'bayan.pptx'});EX=0;render()})},500)};
+  $('#e3').onclick=()=>{const ws=XLSX.utils.json_to_sheet(R),wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,'البيانات');XLSX.writeFile(wb,'bayan.xlsx')};
+  $('#fa').onclick=()=>{const c=$('#fc').value,d=$('#fd').value,t=$('#ft2').value,k=$('#fk').value,l=$('#fl2').value,n=$('#fn').value;if(!c||!d){toast('أدخل رقم القضية والتاريخ');return}SH.push({id:'sh'+Date.now(),case:c,date:d,time:t,kind:k,lawyer:l,note:n,src:1});$('#fc').value='';$('#fd').value='';$('#ft2').value='';$('#fn').value='';renderSess();toast('تمت الإضافة')};
+  $('#sfrom').onchange=e=>{SL=e.target.value;renderSess()};$('#sto').onchange=e=>{SA=e.target.value;renderSess()};$('#sreset').onclick=()=>{SL='';SA='';$('#sfrom').value='';$('#sto').value='';renderSess()};
+  $('#fl2').innerHTML=C.lw.map(w=>`<option>${w}</option>`).join('');renderSess();
 }
+function renderSess(){
+  const all=SS.concat(SH).filter(s=>(!SL||s.date>=SL)&&(!SA||s.date<=SA)).sort((a,b)=>(a.date+(a.time||'')).localeCompare(b.date+(b.time||'')));
+  const up=all.filter(s=>s.date>=td());
+  $('#sk').innerHTML=[['إجمالي الجلسات',all.length,fn,'جلسة مسجلة'],['الجلسات القادمة',up.length,fn,'جلسة قادمة'],['جلسات اليوم',all.filter(s=>s.date==td()).length,fn,'جلسة اليوم'],['أقرب جلسة',null,up[0]?fd(up[0].date):'لا توجد','الموعد القادم']].map((k,i)=>`<div class="k" style="--i:${i}"><span>${k[0]}</span><b>${k[1]===null?k[2]:0}</b><small>${k[3]}</small></div>`).join('');
+  $$('#sk .k').forEach((e,i)=>{const k=[[all.length,fn],[up.length,fn],[all.filter(s=>s.date==td()).length,fn]][i];if(k)cnt(e.querySelector('b'),k[0],k[1])});
+  $('#sc').innerHTML=['الكل','اليوم','خلال أسبوع','خلال شهر'].map((t,i)=>`<button class="b ${i===role?'s':''}" onclick="setRole(${i})">${t}</button>`).join('');
+  const dt=all.filter(s=>{if(role==1)return s.date==td();if(role==2)return dd(s.date)>=0&&dd(s.date)<=7;if(role==3)return dd(s.date)>=0&&dd(s.date)<=30;return true});
+  $('#sl').innerHTML=dt.length?dt.map((s,i)=>`<div class="rk v1" style="--i:${i}"><span class="pl">قضية: ${s.case}</span><p><b>النوع:</b> ${s.kind}</p><p><b>التاريخ:</b> ${fd(s.date)} ${s.time?(' | '+s.time):''}</p><p><b>المحامي:</b> ${s.lawyer}</p>${s.note?('<p class="sl"><b>ملاحظات:</b> '+s.note+'</p>'):''}</div>`).join(''):'<div class="cd" style="grid-column:1/-1"><h3>لا توجد جلسات</h3></div>';
+}
+window.setRole=r=>{role=r;renderSess()};
 </script>
-</body>
-</html>
+</body></html>
